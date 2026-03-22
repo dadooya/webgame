@@ -45,18 +45,22 @@ class board{
 
   
   static pos= class{
-    static convert(p){
+    static convert2(p){
       let x=convertEn(p[0]);
-      let y=p[1];
+      let y=Number(p[1]);
       return x,y
     }
     convertEn(ch) {
       return ch.charCodeAt(0) - "a".charCodeAt(0) + 1;
     }
+    static convert1(x,y){
+      return String.fromCharCode("a".charCodeAt(0) + x - 1)+String(y);
+    }
 
   }
 
 checkteam(ch) {
+  if (ch==='e') return "e"
   if (ch >= 'A' && ch <= 'Z') return "w";
   if (ch >= 'a' && ch <= 'z') return "b";
   return -1; // 알파벳이 아닐 때
@@ -68,15 +72,72 @@ converttofen(){
 }
   
   basicmove(start,end){
-    sx=pos.convert(start)[0];
-    sy=pos.convert(start)[1];
-    ex=pos.convert(end)[0];
-    ey=pos.convert(end)[1];
+    sx=pos.convert2(start)[0];
+    sy=pos.convert2(start)[1];
+    ex=pos.convert2(end)[0];
+    ey=pos.convert2(end)[1];
 
     team=checkteam(this.list[sy][sx]);
     
     this.list[ey][ex]=this.list[sy][sx];
     this.list[sy][sx]="e";
+  }
+
+  typeNmove(x,y){
+    function inrange(a){return 0<=a&&a<=7;}
+    movelist=[];
+let team=checkteam(this.list[y][x]);
+    function go(sx,sy,mx,my){
+      if(inrange(sx+mx)&&inrange(sy+my)){
+        if(checkteam(this.list[sy+my][sx+mx]!=team){
+          movelist.push([sx+mx,sy+my]);
+          if(checkteam(this.list[sy+my][sx+mx])==="e")go(sx+mx,sy+my,mx,my);
+        }
+      }
+    }
+    switch (this.list[y][x]){
+      case "r":
+      case "R":
+        go(x,y,0,1);
+        go(x,y,0,-1);
+        go(x,y,1,0);
+        go(x,y,-1,0);
+        break;
+      case "b":
+      case "B":
+        go(x,y,1,1);
+        go(x,y,1,-1);
+        go(x,y,-1,1);
+        go(x,y,-1,-1);
+        break;
+      case "q":
+      case "Q":
+        go(x,y,0,1);
+        go(x,y,0,-1);
+        go(x,y,1,0);
+        go(x,y,-1,0);
+        go(x,y,1,1);
+        go(x,y,1,-1);
+        go(x,y,-1,1);
+        go(x,y,-1,-1);
+        break;
+      case "k":
+      case "K":
+        for(i=-1;i<2;i++){
+          for(j=-1;j<2;j++){
+            if(inrange(x+j)&&inrange(y+i)){
+            if(team!=checkteamm(this.list[y+i][x+j])) this.list.push([x+j,y+i]);
+            }
+          }
+        }
+      case "n":
+      case "N":
+        function pushn(mx,my){
+          if(inrange(x+mx)&&inrange(y+my)){
+            if(checkteam(
+          }
+        }
+    }
   }
   
 }
